@@ -1,135 +1,132 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard — AI Quiz Hub</title>
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css"
-      rel="stylesheet"
-    />
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'quizzes/css/dashboard.css' %}" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — AI Quiz Hub</title>
 
-  <body>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'quizzes/css/dashboard.css' %}" />
+</head>
 
-    <div class="navbar">
-      <div class="brand">AI Quiz Hub</div>
-      <div class="nav-links">
-        <a href="#">Dashboard</a>
-        <a href="{% url 'accounts:profile' %}">Profile</a>
-        <a href="{% url 'accounts:logout' %}">Logout</a>
+<body>
+
+  <div class="navbar">
+    <div class="brand">AI Quiz Hub</div>
+    <div class="nav-links">
+      <a href="#">Dashboard</a>
+      <a href="{% url 'accounts:profile' %}">Profile</a>
+      <a href="{% url 'accounts:logout' %}">Logout</a>
+    </div>
+  </div>
+
+  <div class="dashboard-container">
+    <!-- WELCOME -->
+    <div class="welcome-card">
+      <div class="welcome-header">
+        {% if request.user.avatar_path %}
+        <img src="{{ request.user.avatar_path.url }}" class="user-avatar" />
+        {% else %}
+        <div class="user-avatar-placeholder">
+          {{ request.user.username|slice:":1"|upper }}
+        </div>
+        {% endif %}
+        <div>
+          <div class="welcome-title">
+            Welcome back, {{ request.user.username }} 👋
+          </div>
+          <div class="welcome-sub" ,>
+            Track your quiz performance and improve daily.
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="dashboard-container">
-      <!-- WELCOME -->
-      <div class="welcome-card">
-        <div class="welcome-header">
-          {% if request.user.avatar_path %}
-          <img src="{{ request.user.avatar_path.url }}" class="user-avatar" />
-          {% else %}
-          <div class="user-avatar-placeholder">
-            {{ request.user.username|slice:":1"|upper }}
+    <!-- QUICK ACTIONS -->
+
+    <div class="grid">
+      <a href="{% url 'quizzes:quiz_selector' %}" class="card-link">
+        <div class="card">
+          <div class="card-icon"><i class="ri-book-open-line"></i></div>
+          <div class="card-title">Start New Quiz</div>
+          <div class="card-desc">Choose category & difficulty.</div>
+        </div>
+      </a>
+
+      <a href="{% url 'quizzes:performance_dashboard' %}" class="card-link">
+        <div class="card">
+          <div class="card-icon">
+            <i class="ri-bar-chart-2-line"></i>
           </div>
-          {% endif %}
-          <div>
-            <div class="welcome-title">
-              Welcome back, {{ request.user.username }} 👋
-            </div>
-            <div class="welcome-sub" ,>
-              Track your quiz performance and improve daily.
-            </div>
+          <div class="card-title">Performance Analytics</div>
+          <div class="card-desc">View score trends & insights.</div>
+        </div>
+      </a>
+
+      <!-- Recent Quizzes Card -->
+      <a href="{% url 'quizzes:recent_quizzes' %}" class="card-link">
+        <div class="card">
+          <div class="card-icon">
+            <i class="ri-history-line"></i>
+          </div>
+          <div class="card-title">Recent Quizzes</div>
+          <div class="card-desc">
+            {{ recent_quizzes|length }} recent quizzes
           </div>
         </div>
+      </a>
+
+      <!-- Attempts Summary Card -->
+      <a href="{% url 'quizzes:attempts_summary' %}" class="card-link">
+        <div class="card">
+          <div class="card-icon">
+            <i class="ri-settings-3-line"></i>
+          </div>
+          <div class="card-title">Attempts</div>
+          <div class="card-desc">Track your practice consistency</div>
+        </div>
+      </a>
+
+      <!-- Leaderboard Card -->
+      <a href="{% url 'quizzes:leaderboard' %}" class="card-link">
+        <div class="card">
+          <div class="card-icon">
+            <i class="ri-trophy-line"></i>
+          </div>
+          <div class="card-title">Leaderboard</div>
+          <div class="card-desc">See top performers</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number">{{ total_completed }}</div>
+        <div class="stat-label">Quizzes Completed</div>
       </div>
 
-      <!-- QUICK ACTIONS -->
-
-      <div class="grid">
-        <a href="{% url 'quizzes:categories' %}" class="card-link">
-          <div class="card">
-            <div class="card-icon"><i class="ri-book-open-line"></i></div>
-            <div class="card-title">Start New Quiz</div>
-            <div class="card-desc">Choose category & difficulty.</div>
-          </div>
-        </a>
-
-        <a href="{% url 'quizzes:performance_dashboard' %}" class="card-link">
-          <div class="card">
-            <div class="card-icon">
-              <i class="ri-bar-chart-2-line"></i>
-            </div>
-            <div class="card-title">Performance Analytics</div>
-            <div class="card-desc">View score trends & insights.</div>
-          </div>
-        </a>
-
-        <!-- Recent Quizzes Card -->
-        <a href="{% url 'quizzes:recent_quizzes' %}" class="card-link">
-          <div class="card">
-            <div class="card-icon">
-              <i class="ri-history-line"></i>
-            </div>
-            <div class="card-title">Recent Quizzes</div>
-            <div class="card-desc">
-              {{ recent_quizzes|length }} recent quizzes
-            </div>
-          </div>
-        </a>
-
-        <!-- Attempts Summary Card -->
-        <a href="{% url 'quizzes:attempts_summary' %}" class="card-link">
-          <div class="card">
-            <div class="card-icon">
-              <i class="ri-settings-3-line"></i>
-            </div>
-            <div class="card-title">Attempts</div>
-            <div class="card-desc">Track your practice consistency</div>
-          </div>
-        </a>
-
-        <!-- Leaderboard Card -->
-        <a href="{% url 'quizzes:leaderboard' %}" class="card-link">
-          <div class="card">
-            <div class="card-icon">
-              <i class="ri-trophy-line"></i>
-            </div>
-            <div class="card-title">Leaderboard</div>
-            <div class="card-desc">See top performers</div>
-          </div>
-        </a>
+      <div class="stat-card">
+        <div class="stat-number">{{ avg_score }}%</div>
+        <div class="stat-label">Average Score</div>
       </div>
 
-      <!-- STATS -->
-      <div class="stats">
-        <div class="stat-card">
-          <div class="stat-number">{{ total_completed }}</div>
-          <div class="stat-label">Quizzes Completed</div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ best_score }}%</div>
+        <div class="stat-label">Best Score</div>
+      </div>
 
-        <div class="stat-card">
-          <div class="stat-number">{{ avg_score }}%</div>
-          <div class="stat-label">Average Score</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-number">{{ best_score }}%</div>
-          <div class="stat-label">Best Score</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-number">{{ completion_rate }}%</div>
-          <div class="stat-label">Completion Rate</div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ completion_rate }}%</div>
+        <div class="stat-label">Completion Rate</div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

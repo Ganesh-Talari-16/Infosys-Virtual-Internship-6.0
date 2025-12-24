@@ -99,14 +99,17 @@ def dashboard(request):
     }
     return render(request, "quizzes/dashboard.html", context)
 
+# ============================================================
+# DEPRECATED: OLD MULTI-PAGE CATEGORY SELECTION VIEWS
+# These views are replaced by the SPA in views_spa.py
+# Kept for backwards compatibility but no longer routed
+# ============================================================
 
-# ============================================================
-# STEP 1 — SHOW ALL MAIN CATEGORIES (e.g. Academic, GK, Ent)
-# ============================================================
+# @deprecated - Replaced by views_spa.quiz_selector_view
 def category_list(request):
     """
-    Show top-level Category rows (Academic, Entertainment, General Knowledge).
-    From here user selects a main category — then we show its level=1 subcategories.
+    [DEPRECATED] Show top-level Category rows.
+    This was the old multi-page flow. Now replaced by SPA at /quiz/select/
     """
     categories = Category.objects.all()
     return render(request, "quizzes/category_list.html", {
@@ -115,18 +118,14 @@ def category_list(request):
     })
 
 
-# ============================================================
-# STEP 2 — SHOW LEVEL-1 SUBCATEGORIES FOR A GIVEN CATEGORY
-# ============================================================
+# @deprecated - Replaced by views_spa.get_children_ajax  
 def choose_subcategory(request, category_id):
     """
-    Given a Category (e.g. Academic), show only its level=1 subcategories:
-    i.e. SubCategory.objects.filter(category=category, parent_subcat__isnull=True)
+    [DEPRECATED] Show level-1 subcategories for a category.
+    This was the old multi-page flow. Now replaced by SPA AJAX.
     """
     category = get_object_or_404(Category, id=category_id)
-
     level1_subs = SubCategory.objects.filter(category=category, parent_subcat__isnull=True).order_by('name')
-
     return render(request, "quizzes/step_subcategories.html", {
         "category": category,
         "subcategories": level1_subs,
@@ -134,21 +133,16 @@ def choose_subcategory(request, category_id):
     })
 
 
-# ============================================================
-# STEP 2b — SHOW CHILD SUBCATEGORIES FOR A SELECTED SUBCATEGORY
-# ============================================================
+# @deprecated - Replaced by views_spa.get_children_ajax
 def subcategory_children(request, sub_id):
     """
-    When user clicks a SubCategory (e.g. Engineering), this view lists its children (CS, Civil...).
-    If no children exist (i.e. it's a leaf), redirect to difficulty selection.
+    [DEPRECATED] List children of a subcategory.
+    This was the old multi-page flow. Now replaced by SPA AJAX.
     """
     parent = get_object_or_404(SubCategory, id=sub_id)
     children = SubCategory.objects.filter(parent_subcat=parent).order_by('name')
-
-    # If no children -> this is a leaf (or final node). Go to difficulty selection.
     if not children.exists():
         return redirect('quizzes:choose_difficulty', subcategory_id=parent.id)
-
     return render(request, "quizzes/child_subcategories.html", {
         "parent": parent,
         "children": children,
@@ -156,24 +150,17 @@ def subcategory_children(request, sub_id):
     })
 
 
-# ============================================================
-# STEP 3 — CHOOSE DIFFICULTY (only for a chosen subcategory)
-# ============================================================
+# @deprecated - Replaced by SPA difficulty selection in quiz_selector.html
 def choose_difficulty(request, subcategory_id):
     """
-    Show difficulty options for a chosen subcategory.
-    (This view is reached either from a leaf-level subcategory, or from the children view.)
+    [DEPRECATED] Show difficulty options.
+    This was the old multi-page flow. Now handled in SPA.
     """
     subcategory = get_object_or_404(SubCategory, id=subcategory_id)
-
-    # If subcategory is not a leaf and has children, it's better UX to redirect
-    # user to its children page so they pick the precise leaf.
     if not subcategory.is_leaf:
-        # If it has children, redirect to children listing
         children = SubCategory.objects.filter(parent_subcat=subcategory)
         if children.exists():
             return redirect('quizzes:subcategory_children', sub_id=subcategory.id)
-
     return render(request, "quizzes/step_difficulty.html", {
         "subcategory": subcategory
     })
