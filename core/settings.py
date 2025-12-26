@@ -1,5 +1,6 @@
 # API-KEY-GROQ:  
 from dotenv import load_dotenv
+import os
 load_dotenv()
 
 """
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 # static & media
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
@@ -98,21 +100,30 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Using SQLite for development (MySQL not required)
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'quizdb',
-    'USER': 'quizuser',
-    'PASSWORD': 'quizpass',
-    'HOST': '127.0.0.1',
-    'PORT': '3306',
-    'OPTIONS': {
-      'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-      'charset': 'utf8mb4',
-    },
-    'CONN_MAX_AGE': 600,
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# To use MySQL instead, uncomment below and comment SQLite above:
+# DATABASES = {
+#   'default': {
+#     'ENGINE': 'django.db.backends.mysql',
+#     'NAME': 'quizdb',
+#     'USER': 'quizuser',
+#     'PASSWORD': 'quizpass',
+#     'HOST': '127.0.0.1',
+#     'PORT': '3306',
+#     'OPTIONS': {
+#       'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#       'charset': 'utf8mb4',
+#     },
+#     'CONN_MAX_AGE': 600,
+#   }
+# }
 
 
 # Password validation
@@ -156,17 +167,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-# Infosys/settings.py (Add to the end of the file)
-
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Directory where uploaded files (avatars, etc.) will be stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# The URL prefix for media files (used in templates)
-MEDIA_URL = '/media/'
-
-import os
-
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")

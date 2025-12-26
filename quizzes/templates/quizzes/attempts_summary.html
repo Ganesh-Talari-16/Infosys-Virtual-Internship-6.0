@@ -1,18 +1,412 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Attempts Summary</title>
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attempts Summary — AI Quiz Hub</title>
 
-<h2>📊 Attempts Summary</h2>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
-<ul>
-  <li><strong>Total Attempts:</strong> {{ total_attempts }}</li>
-  <li><strong>Completed:</strong> {{ completed_attempts }}</li>
-  <li><strong>Abandoned:</strong> {{ abandoned_attempts }}</li>
-  {% comment %} <li><strong>Last 7 Days:</strong> {{ last_7_days_attempts }}</li> {% endcomment %}
-</ul>
+    <!-- Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
 
-</body>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #0f172a;
+        min-height: 100vh;
+        color: #e2e8f0;
+        position: relative;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: 
+          linear-gradient(135deg, #0a1628 0%, #0f172a 50%, #1e293b 100%),
+          radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 40%),
+          radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.08) 0%, transparent 40%);
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(20px);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-brand {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .nav-link {
+        color: #94a3b8;
+        text-decoration: none;
+        padding: 0.625rem 1.25rem;
+        border-radius: 0.625rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        color: #fbbf24;
+        background: rgba(245, 158, 11, 0.1);
+      }
+
+      /* Container */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* Back Link */
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #94a3b8;
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: #fbbf24;
+      }
+
+      /* Page Header */
+      .page-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .page-header h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .page-header h1 i {
+        color: #fbbf24;
+      }
+
+      .page-header p {
+        color: #94a3b8;
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1.25rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        animation: slideUp 0.5s ease forwards;
+        opacity: 0;
+      }
+
+      .stat-card:nth-child(1) { animation-delay: 0.1s; }
+      .stat-card:nth-child(2) { animation-delay: 0.2s; }
+      .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(245, 158, 11, 0.4);
+        box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.75rem;
+      }
+
+      .stat-icon.total {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.1));
+        color: #fbbf24;
+      }
+
+      .stat-icon.completed {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.1));
+        color: #22c55e;
+      }
+
+      .stat-icon.abandoned {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+        color: #ef4444;
+      }
+
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-value.total {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .stat-value.completed {
+        background: linear-gradient(135deg, #22c55e, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .stat-value.abandoned {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .stat-label {
+        color: #94a3b8;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Progress Bar */
+      .progress-section {
+        background: rgba(30, 41, 59, 0.6);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1.25rem;
+        padding: 2rem;
+        animation: slideUp 0.5s ease 0.4s forwards;
+        opacity: 0;
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .progress-title {
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .progress-title i {
+        color: #fbbf24;
+      }
+
+      .progress-percentage {
+        color: #22c55e;
+        font-weight: 600;
+      }
+
+      .progress-bar {
+        height: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #10b981);
+        border-radius: 999px;
+        transition: width 1s ease;
+      }
+
+      .progress-legend {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1.5rem;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #94a3b8;
+        font-size: 0.875rem;
+      }
+
+      .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .legend-dot.completed {
+        background: #22c55e;
+      }
+
+      .legend-dot.abandoned {
+        background: #ef4444;
+      }
+
+      /* Responsive */
+      @media (max-width: 640px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .progress-legend {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="{% url 'quizzes:dashboard' %}" class="nav-brand">AI Quiz Hub</a>
+      <div class="nav-links">
+        <a href="{% url 'quizzes:dashboard' %}" class="nav-link">Dashboard</a>
+        <a href="{% url 'accounts:profile' %}" class="nav-link">Profile</a>
+        <a href="{% url 'accounts:logout' %}" class="nav-link">Logout</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <a href="{% url 'quizzes:dashboard' %}" class="back-link">
+        <i class="ri-arrow-left-line"></i>
+        Back to Dashboard
+      </a>
+
+      <div class="page-header">
+        <h1><i class="ri-bar-chart-box-line"></i> Attempts Summary</h1>
+        <p>Overview of your quiz attempt statistics</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon total">
+            <i class="ri-file-list-3-line"></i>
+          </div>
+          <div class="stat-value total">{{ total_attempts }}</div>
+          <div class="stat-label">Total Attempts</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon completed">
+            <i class="ri-checkbox-circle-line"></i>
+          </div>
+          <div class="stat-value completed">{{ completed_attempts }}</div>
+          <div class="stat-label">Completed</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon abandoned">
+            <i class="ri-close-circle-line"></i>
+          </div>
+          <div class="stat-value abandoned">{{ abandoned_attempts }}</div>
+          <div class="stat-label">Abandoned</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-header">
+          <div class="progress-title">
+            <i class="ri-pie-chart-2-line"></i>
+            Completion Rate
+          </div>
+          <div class="progress-percentage">
+            {% widthratio completed_attempts total_attempts 100 as completion_rate %}
+            {% if total_attempts > 0 %}{{ completion_rate }}%{% else %}0%{% endif %}
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: {% if total_attempts > 0 %}{% widthratio completed_attempts total_attempts 100 %}{% else %}0{% endif %}%;"></div>
+        </div>
+        <div class="progress-legend">
+          <div class="legend-item">
+            <span class="legend-dot completed"></span>
+            Completed
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot abandoned"></span>
+            Abandoned
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
