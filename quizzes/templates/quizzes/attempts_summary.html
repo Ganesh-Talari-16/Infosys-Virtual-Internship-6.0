@@ -329,7 +329,7 @@
         </div>
         <div class="stat-info">
           {% if total_attempts > 0 %}
-          <div class="stat-value">{{ completed_attempts|floatformat:0 }}%</div>
+          <div class="stat-value">{% widthratio completed_attempts total_attempts 100 %}%</div>
           {% else %}
           <div class="stat-value">0%</div>
           {% endif %}
@@ -345,7 +345,7 @@
 
       {% if total_attempts > 0 %}
       <div class="progress-bar-container">
-        <div class="progress-bar completed" style="width: {% widthratio completed_attempts total_attempts 100 %}%">
+        <div class="progress-bar completed" style="width: {% widthratio completed_attempts total_attempts 100 %}%;">
         </div>
       </div>
       <div class="progress-legend">

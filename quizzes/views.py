@@ -1,17 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Max, Min, Sum, Count
-from django.db.models.functions import Coalesce
-from .models import Category, SubCategory, QuizAttempt
-from django.http import JsonResponse
+from django.db.models import Avg, Max, Min, Sum, Count, Q
+from django.db.models.functions import Coalesce, TruncDate
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
-from datetime import timedelta
-from .models import QuizAttempt, Question
-from .models import Concept
-import random
+from django.utils.timezone import now
 from django.views.decorators.http import require_POST
+from datetime import timedelta, datetime
+import random
 import json
-from django.db.models.functions import TruncDate
+
+from .models import Category, SubCategory, QuizAttempt, Question, Concept
+
 # for performance pdf functionality
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
@@ -19,22 +19,10 @@ from reportlab.platypus import (
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from django.http import HttpResponse
-from django.utils.timezone import now
-
-# Attempts summary 
-from django.db.models import Count, Q
-from django.utils.timezone import now
-from datetime import timedelta
 
 # AI Feedback recommendation
 from .ai_feedback_service import generate_ai_feedback
-#
 
-# streak
-from django.utils import timezone
-from datetime import timedelta, datetime
- 
 #============================================================
 # USER DASHBOARD
 # ============================================================

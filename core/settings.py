@@ -1,4 +1,4 @@
-# API-KEY-GROQ:  
+import os
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -24,12 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7z6%k!w84_45l7v!#_gevttzfn9kj38j2hd8k5u=alz3rbu6pv'
+# Load from environment variable in production
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-7z6%k!w84_45l7v!#_gevttzfn9kj38j2hd8k5u=alz3rbu6pv')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
 
 
 # Application definition
@@ -156,17 +155,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-# Infosys/settings.py (Add to the end of the file)
-
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Directory where uploaded files (avatars, etc.) will be stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# The URL prefix for media files (used in templates)
-MEDIA_URL = '/media/'
-
-import os
-
+# OpenAI API Key for quiz generation
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")

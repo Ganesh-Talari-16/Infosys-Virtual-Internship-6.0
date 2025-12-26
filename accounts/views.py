@@ -28,10 +28,8 @@ def register_view(request):
             messages.success(request, "Registration successful! Welcome to AI Quiz Hub.")
             return redirect('quizzes:dashboard')
         else:
-            # If the form is NOT valid, the code jumps here.
-            # You must pass the form back to the template to display errors.
-            print("Form validation failed. Errors:", form.errors) # DEBUG LINE
-            # If you see this printout, check form.errors for the reason
+            # Form validation failed - errors will be displayed in template
+            pass
     else:
         form = RegistrationForm()
 
@@ -53,9 +51,6 @@ class CustomLoginView(LoginView):
 # ---------------------------
 # PROFILE PAGE (User model only — no UserProfile)
 # ---------------------------
-@login_required
-
-
 @login_required
 def profile_view(request):
     user = request.user
