@@ -168,3 +168,10 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # OpenAI API Key for quiz generation
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    # add your host if you use a different domain/port, include scheme
+]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
