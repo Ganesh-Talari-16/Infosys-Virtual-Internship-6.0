@@ -76,39 +76,54 @@ def generate_quiz_questions(
         )
 
     prompt = f"""
-You are an expert exam question setter.
+You are an expert exam question setter for competitive exams.
 
 Topic: {topic}
 Category: {category}
 Difficulty: {difficulty}
 
-STRICT RULES:
+CRITICAL INSTRUCTIONS:
 1. Generate exactly {count} UNIQUE multiple choice questions.
-2. Generate EXACTLY ONE question per concept.
-3. Use ONLY the concepts listed below.
-4. Do NOT repeat or rephrase questions.
-5. Each question must test a different idea.
-6. Keep difficulty strictly at {difficulty} level.
+2. Each question must TEST KNOWLEDGE about a concept, NOT ask what the concept is called.
+3. Questions should test UNDERSTANDING, APPLICATION, or ANALYSIS of the concept.
 
-CONCEPT LIST:
+❌ BAD QUESTION TYPES (DO NOT GENERATE THESE):
+- "What concept describes...?" 
+- "Which term refers to...?"
+- "What is the name of...?"
+- "Which of the following is/describes...?"
+
+✅ GOOD QUESTION TYPES (GENERATE THESE):
+- Scenario-based: "Given this situation, what would happen?"
+- Application: "How would you solve this problem?"
+- Analysis: "What is the output/result of...?"
+- Calculation: "Calculate/Find the value of..."
+- Comparison: "What is the difference between X and Y in this case?"
+
+CONCEPTS TO TEST (one question per concept):
 {concept_block}
 
-Each item must follow EXACTLY this JSON structure:
+For each concept, create a question that requires the student to APPLY or UNDERSTAND the concept, not just remember its name.
 
+DIFFICULTY GUIDELINES:
+- Easy: Basic application, straightforward scenarios
+- Medium: Multi-step problems, edge cases
+- Hard: Complex scenarios, tricky edge cases, optimization
+
+OUTPUT FORMAT - Return ONLY this JSON array:
 [
   {{
-    "question": "text",
-    "option_a": "A option",
-    "option_b": "B option",
-    "option_c": "C option",
-    "option_d": "D option",
+    "question": "A practical question testing the concept...",
+    "option_a": "plausible answer",
+    "option_b": "plausible answer", 
+    "option_c": "plausible answer",
+    "option_d": "plausible answer",
     "correct_answer": "A",
-    "explanation": "why the answer is correct"
+    "explanation": "Detailed explanation of why this is correct and others are wrong"
   }}
 ]
 
-Return ONLY the JSON array.
-No text outside JSON.
+Return ONLY the JSON array. No text outside JSON.
 """
 
     try:

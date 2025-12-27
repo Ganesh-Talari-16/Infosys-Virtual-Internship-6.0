@@ -1,0 +1,301 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Quiz | AI Quiz Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'quizzes/css/quiz_selector.css' %}">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="brand">AI Quiz Hub</div>
+        <div class="nav-links">
+            <a href="{% url 'quizzes:dashboard' %}">Dashboard</a>
+            <a href="{% url 'accounts:profile' %}">Profile</a>
+            <a href="{% url 'accounts:logout' %}">Logout</a>
+        </div>
+    </div>
+
+    <div class="spa-container">
+        <!-- Header -->
+        <div class="spa-header">
+            <div class="spa-header-content">
+                <span style="font-size: 2rem;">🎯</span>
+                <div>
+                    <h1>Choose Your Quiz</h1>
+                    <p>Select a category and navigate through the topics</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breadcrumb Trail -->
+        <div class="breadcrumb" id="breadcrumb">
+            <span class="breadcrumb-item active">Select a Category</span>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="content-wrapper">
+            <!-- Left: Levels -->
+            <div class="levels-section" id="levels-container">
+                <!-- Level 1: Categories -->
+                <div class="level-container" data-level="1">
+                    <div class="level-label"><span>1</span> Categories</div>
+                    <div class="cards-grid">
+                        {% for cat in categories %}
+                        <div class="selection-card" data-type="category" data-id="{{ cat.id }}"
+                            data-name="{{ cat.name }}">
+                            <span class="card-icon">
+                                {% if 'Academic' in cat.name %}📚
+                                {% elif 'Entertainment' in cat.name %}🎬
+                                {% elif 'General' in cat.name %}🌍
+                                {% else %}📁{% endif %}
+                            </span>
+                            <div class="card-content">
+                                <div class="card-name">{{ cat.name }}</div>
+                                <div class="card-desc">{{ cat.description|default:"Explore topics" }}</div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <p>No categories available.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Sidebar -->
+            <div class="sidebar-section">
+                <!-- Placeholder when nothing selected -->
+                <div class="sidebar-placeholder" id="sidebar-placeholder">
+                    <div class="sidebar-placeholder-icon">📋</div>
+                    <h4>Your Selection</h4>
+                    <p>Select categories to see options here</p>
+                </div>
+
+                <!-- Selection Summary (shown when selecting) -->
+                <div class="difficulty-panel" id="sidebar-content" style="display: none;">
+                    <div class="selection-summary">
+                        <h4>Selected Path</h4>
+                        <div class="selection-path" id="selection-path"></div>
+                    </div>
+
+                    <h3>⚡ Difficulty Level</h3>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn easy" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-btn medium" data-difficulty="medium">Medium</button>
+                        <button class="difficulty-btn hard" data-difficulty="hard">Hard</button>
+                    </div>
+
+                    <!-- Start Quiz Button -->
+                    <div class="start-quiz-container" id="start-container" style="display: none;">
+                        <a href="#" class="start-quiz-btn" id="start-quiz-btn">
+                            🚀 Start Quiz
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            // State management
+            const state = {
+                selections: [],
+                leafSubcategoryId: null,
+                difficulty: null
+            };
+
+            const levelsContainer = document.getElementById('levels-container');
+            const breadcrumb = document.getElementById('breadcrumb');
+            const sidebarPlaceholder = document.getElementById('sidebar-placeholder');
+            const sidebarContent = document.getElementById('sidebar-content');
+            const selectionPath = document.getElementById('selection-path');
+            const startContainer = document.getElementById('start-container');
+            const startBtn = document.getElementById('start-quiz-btn');
+
+            // CSRF token for AJAX
+            function getCsrfToken() {
+                const cookie = document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='));
+                return cookie ? cookie.split('=')[1] : '';
+            }
+
+            // Update breadcrumb display
+            function updateBreadcrumb() {
+                let html = '';
+                if (state.selections.length === 0) {
+                    html = '<span class="breadcrumb-item active">Select a Category</span>';
+                } else {
+                    state.selections.forEach((sel, i) => {
+                        const isLast = i === state.selections.length - 1;
+                        html += `<span class="breadcrumb-item ${isLast ? 'active' : ''}">${sel.name}</span>`;
+                        if (!isLast) {
+                            html += '<span class="breadcrumb-separator">›</span>';
+                        }
+                    });
+                }
+                breadcrumb.innerHTML = html;
+            }
+
+            // Update sidebar selection path
+            function updateSelectionPath() {
+                let html = '';
+                state.selections.forEach(sel => {
+                    html += `<span class="path-item">${sel.name}</span>`;
+                });
+                selectionPath.innerHTML = html;
+            }
+
+            // Clear levels after a given level number
+            function clearLevelsAfter(level) {
+                const containers = levelsContainer.querySelectorAll('.level-container');
+                containers.forEach(c => {
+                    if (parseInt(c.dataset.level) > level) {
+                        c.remove();
+                    }
+                });
+                state.selections = state.selections.filter(s => s.level <= level);
+                state.leafSubcategoryId = null;
+                state.difficulty = null;
+                startContainer.style.display = 'none';
+                document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('selected'));
+            }
+
+            // Render a new level of cards
+            function renderLevel(level, children, parentName) {
+                const levelDiv = document.createElement('div');
+                levelDiv.className = 'level-container';
+                levelDiv.dataset.level = level;
+
+                let levelLabel = 'Options';
+                if (level === 2) levelLabel = 'Sub-categories';
+                else if (level === 3) levelLabel = 'Streams';
+                else if (level >= 4) levelLabel = 'Topics';
+
+                let cardsHtml = '';
+                if (children.length === 0) {
+                    cardsHtml = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No sub-topics for ${parentName}</p>
+                    </div>
+                `;
+                } else {
+                    children.forEach(child => {
+                        const icon = child.is_leaf ? '📝' : '📂';
+                        cardsHtml += `
+                        <div class="selection-card" 
+                             data-type="subcategory" 
+                             data-id="${child.id}" 
+                             data-name="${child.name}"
+                             data-is-leaf="${child.is_leaf}">
+                            <span class="card-icon">${icon}</span>
+                            <div class="card-content">
+                                <div class="card-name">${child.name}</div>
+                                <div class="card-desc">${child.description || 'Click to explore'}</div>
+                            </div>
+                        </div>
+                    `;
+                    });
+                }
+
+                levelDiv.innerHTML = `
+                <div class="level-label"><span>${level}</span> ${levelLabel}</div>
+                <div class="cards-grid">${cardsHtml}</div>
+            `;
+
+                levelsContainer.appendChild(levelDiv);
+                attachCardListeners(levelDiv);
+            }
+
+            // Fetch children from server
+            async function fetchChildren(nodeType, nodeId) {
+                const url = `{% url 'quizzes:get_children' %}?node_type=${nodeType}&node_id=${nodeId}`;
+                try {
+                    const response = await fetch(url, {
+                        headers: { 'X-CSRFToken': getCsrfToken() }
+                    });
+                    if (!response.ok) throw new Error('Network error');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching children:', error);
+                    return { children: [], parent_name: '' };
+                }
+            }
+
+            // Handle card click
+            async function handleCardClick(card) {
+                const type = card.dataset.type;
+                const id = card.dataset.id;
+                const name = card.dataset.name;
+                const isLeaf = card.dataset.isLeaf === 'true';
+                const levelContainer = card.closest('.level-container');
+                const level = parseInt(levelContainer.dataset.level);
+
+                clearLevelsAfter(level);
+
+                state.selections = state.selections.filter(s => s.level < level);
+                state.selections.push({ type, id, name, level });
+
+                levelContainer.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+
+                updateBreadcrumb();
+                updateSelectionPath();
+
+                if (isLeaf) {
+                    // Set the leaf subcategory ID as integer
+                    state.leafSubcategoryId = parseInt(id, 10);
+                    sidebarPlaceholder.style.display = 'none';
+                    sidebarContent.style.display = 'block';
+                } else {
+                    // Not a leaf - hide sidebar and reset leaf ID
+                    state.leafSubcategoryId = null;
+                    state.difficulty = null;
+                    sidebarPlaceholder.style.display = 'block';
+                    sidebarContent.style.display = 'none';
+                    startContainer.style.display = 'none';
+                    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+
+                    const data = await fetchChildren(type, id);
+                    if (data.children && data.children.length >= 0) {
+                        renderLevel(level + 1, data.children, name);
+                    }
+                }
+            }
+
+            // Attach listeners to cards
+            function attachCardListeners(container) {
+                container.querySelectorAll('.selection-card').forEach(card => {
+                    card.addEventListener('click', () => handleCardClick(card));
+                });
+            }
+
+            // Difficulty button clicks
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    state.difficulty = btn.dataset.difficulty;
+
+                    startContainer.style.display = 'block';
+                    startBtn.href = `{% url 'quizzes:instructions' 0 'easy' %}`.replace('/0/', `/${state.leafSubcategoryId}/`).replace('/easy/', `/${state.difficulty}/`);
+                });
+            });
+
+            // Initialize
+            attachCardListeners(document.querySelector('.level-container'));
+        })();
+    </script>
+</body>
+
+</html>
