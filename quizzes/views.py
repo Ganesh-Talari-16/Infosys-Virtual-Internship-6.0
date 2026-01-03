@@ -1107,7 +1107,7 @@ def save_timer(request, attempt_id):
         if remaining is not None:
             attempt.remaining_seconds = int(remaining)
 
-            # ✅ DO NOT calculate time_spent here
+           
             attempt.save(update_fields=['remaining_seconds'])
 
         return JsonResponse({'status': 'saved'})
