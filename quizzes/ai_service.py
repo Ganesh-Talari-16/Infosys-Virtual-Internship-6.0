@@ -110,18 +110,26 @@ DIFFICULTY GUIDELINES:
 - Medium: Multi-step problems, edge cases
 - Hard: Complex scenarios, tricky edge cases, optimization
 
+EXPLANATION RULES (VERY IMPORTANT):
+- Explanation must be written in simple, student-friendly language
+- Limit explanation to 2–3 short sentences
+- Clearly explain WHY the correct option is correct
+- Briefly mention why the other options are incorrect (if relevant)
+- Do NOT include long theory, definitions, or textbook-style content
+
 OUTPUT FORMAT - Return ONLY this JSON array:
 [
-  {{
+  {
     "question": "A practical question testing the concept...",
     "option_a": "plausible answer",
-    "option_b": "plausible answer", 
+    "option_b": "plausible answer",
     "option_c": "plausible answer",
     "option_d": "plausible answer",
     "correct_answer": "A",
-    "explanation": "Detailed explanation of why this is correct and others are wrong"
-  }}
+    "explanation": "2–3 short sentences explaining why the correct option is correct and why the other options are incorrect."
+  }
 ]
+
 
 Return ONLY the JSON array. No text outside JSON.
 """

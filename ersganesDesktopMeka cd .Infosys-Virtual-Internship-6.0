@@ -1,0 +1,251 @@
+[33mcommit b50f7dc3e660961c714af692465643d6b5f71340[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Ganesh-Talari-16 <ganeshpnr16@gmail.com>
+Date:   Sat Jan 3 19:18:50 2026 +0530
+
+    Modification of  -Quiz  Result UI
+
+[33mcommit 5fdcdb0e57fdbfbb5a27e4f314717276ec5dbdec[m
+Merge: 3be32af 7b7b7aa
+Author: Ganesh-Talari-16 <ganeshpnr16@gmail.com>
+Date:   Wed Dec 31 17:09:00 2025 +0530
+
+    Merge origin/main and resolve db.sqlite3 conflict
+
+[33mcommit 3be32af5e804c98e0ccd71eb0e4a9c30cee563a7[m
+Author: Ganesh-Talari-16 <ganeshpnr16@gmail.com>
+Date:   Wed Dec 31 17:01:56 2025 +0530
+
+    Remove db.sqlite3 from version control
+
+[33mcommit 7b7b7aa340e43125d10c9fddebba8da155c7597a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: c2de002 e997b4a
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Mon Dec 29 18:06:47 2025 +0530
+
+    timer issue resolved partially
+
+[33mcommit c2de002440b47ad43a46e85aba914e14032a6fbe[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Mon Dec 29 17:28:00 2025 +0530
+
+    timer ui update
+
+[33mcommit e997b4a670555df1c91f6c0ce7f0fd9590d2cc59[m
+Author: Ganesh-Talari-16 <ganeshpnr16@gmail.com>
+Date:   Mon Dec 29 16:33:52 2025 +0530
+
+    Fix quiz timer calculation uneven increasing and decreasing
+
+[33mcommit 47892b95895f9353b21d35b81dc819b38060ca10[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sun Dec 28 21:42:55 2025 +0530
+
+    resume prompt quiz repositioned to after start quiz
+
+[33mcommit 33d60a75643190b3cb244eea12dd363b57e32e28[m
+Merge: 331cd09 f6a0b1c
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sun Dec 28 21:12:50 2025 +0530
+
+    Merge pr-ui-review into main
+
+[33mcommit 331cd09a73eac76a67afc4e84aaa207393347558[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sun Dec 28 20:47:37 2025 +0530
+
+    Resume quiz prompt part repositioned from last in navigation to first just after selecting start quiz from dashboard
+
+[33mcommit f6a0b1c3207acc8cc75165f731c985a6287041ad[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sun Dec 28 01:35:51 2025 +0530
+
+    Updated UI, resolved merge conflicts
+
+[33mcommit c082a20fc69d005e6584bb7fdc3249108f2995cb[m
+Merge: b09b7c9 c36693e
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sun Dec 28 00:27:08 2025 +0530
+
+    Resolve conflicts and merge UI improvements PR
+
+[33mcommit b09b7c91974fe791846ed22dbda78dda4d143e16[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 27 23:54:52 2025 +0530
+
+    Resolved Navigation UI issues
+
+[33mcommit 3ad8efbb9053332376c3ebafb1fca2cf43f19e83[m
+Merge: 7712b4b 10cc23c
+Author: Aditya A. Naik <112753720+AdityaNaik777@users.noreply.github.com>
+Date:   Sat Dec 27 19:04:32 2025 +0530
+
+    Merge pull request #3 from vikasgaddoju/main
+    
+    Added Entertainment/GK categories, improved AI prompts
+
+[33mcommit 10cc23c87d6bf367988bd7d4c61126ce9d4d70f0[m
+Merge: 7487262 7712b4b
+Author: Aditya A. Naik <112753720+AdityaNaik777@users.noreply.github.com>
+Date:   Sat Dec 27 19:04:17 2025 +0530
+
+    Merge branch 'main' into main
+
+[33mcommit 7712b4bf64714b185f67b68c87804e88ec811493[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 27 18:55:07 2025 +0530
+
+    Added updated Timer function, Need to update more later on
+
+[33mcommit cac2c00b5e0da6d2f5bd81573632a9ee25c89e34[m
+Merge: c683d3f ea4d5b3
+Author: Aditya A. Naik <112753720+AdityaNaik777@users.noreply.github.com>
+Date:   Sat Dec 27 12:24:06 2025 +0530
+
+    Merge pull request #4 from Ganesh-Talari-16/main: Update in Timer Function
+    
+    Fix quiz timer calculation and UI updates
+
+[33mcommit ea4d5b39fb5ccfa5c824abbef2c1214820e9d37a[m
+Merge: 3b1e59c c683d3f
+Author: Aditya A. Naik <112753720+AdityaNaik777@users.noreply.github.com>
+Date:   Sat Dec 27 12:23:04 2025 +0530
+
+    Merge branch 'main' into main
+
+[33mcommit c683d3fc9d147dc3af2b8f36b45c3f54cd4b465d[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 27 12:09:37 2025 +0530
+
+    time spend seconds add in db
+
+[33mcommit c36693e91a0e519c576e92a0baa780216592b276[m
+Author: Krishna Kattimani <krishnamb90@gmail.com>
+Date:   Fri Dec 26 22:02:28 2025 +0530
+
+    Add UI improvements, 404 page, quiz wizard enhancements, and setup documentation
+
+[33mcommit 3b1e59ccd5efe8afd0a51e1997cdd0f022cf2dcd[m
+Author: Ganesh-Talari-16 <ganeshpnr16@gmail.com>
+Date:   Fri Dec 26 18:42:01 2025 +0530
+
+    Fix quiz timer calculation and UI updates
+
+[33mcommit 74872622c93c39abb1758877330fcc4a76843b9d[m
+Author: Vikas Vikky <vikasvikky@gmail.com>
+Date:   Fri Dec 26 16:24:37 2025 +0530
+
+    feat: Major improvements - code quality, templates, fixtures, AI prompts
+    - Added Entertainment subcategories: Music->Rap,Classical | Movies->Action,Drama,TV Shows
+    - Added GK subcategories: Current Affairs->National,International | Static GK->History,Science
+    - Improved AI prompt for better application-based question generation
+
+[33mcommit 1b4dccc6b7911bf71139a9aed63255218ef63c48[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Fri Dec 26 15:13:01 2025 +0530
+
+    Add categories and subcategories data in json form to get loaded at other side
+
+[33mcommit 45596bd4b4d9d140f85b3c0cccce81e62c892d8c[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Fri Dec 26 13:49:21 2025 +0530
+
+    Add initial Concept data
+
+[33mcommit 576d4344a003106749e220494db2c16caf2c4ad1[m
+Author: Vikas Vikky <vikasvikky@gmail.com>
+Date:   Fri Dec 26 01:53:28 2025 +0530
+
+    Enhanced the User Interface for the Recent Quizzes(/quiz/recent/), Attempts Summary (/quiz/attempts/) and Leaderboard (/quiz/leaderboard/).
+
+[33mcommit a17e08ab571827bd0edd2df2cbdaf92d8cc797c7[m
+Author: Vikas Vikky <vikasvikky@gmail.com>
+Date:   Fri Dec 26 01:40:18 2025 +0530
+
+    Reworked on the Quiz genertion part
+
+[33mcommit 3f4433d7a9092d78fa56495007f668c51598cb87[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Fri Dec 26 00:00:42 2025 +0530
+
+    Add back navigation
+
+[33mcommit ec91fd69d2785ac2bbdca2d1c7e1252c3ee8295e[m
+Author: Vikas Vikky <vikasvikky@gmail.com>
+Date:   Thu Dec 25 01:45:53 2025 +0530
+
+    created a SPA for Quiz selection process
+
+[33mcommit 88b3c197153a1c45a9bb1023bb5dc826d9da3059[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Mon Dec 22 23:23:50 2025 +0530
+
+    Add Tailwindcss
+
+[33mcommit f0390c2bb502b54247f32b40298f64e6f34ea96f[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Mon Dec 22 23:21:02 2025 +0530
+
+    Add Resume quiz logic
+
+[33mcommit b654817131059d48f05a8d2b826ea24334c2f450[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Mon Dec 22 23:20:16 2025 +0530
+
+    Add profile pics
+
+[33mcommit f0f00b23d2ef464c7bab0864073be47020c5750f[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Mon Dec 22 23:19:37 2025 +0530
+
+    Add Leaderboard Page
+
+[33mcommit 3faa98667a011bcb81bb51fc94b7d0b25f70e856[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:14:53 2025 +0530
+
+    Updates
+
+[33mcommit 7298156580ae0c391ad22141ef7222b91b8ce1a8[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:14:36 2025 +0530
+
+    Activate perfomance analysis and other 3 cards
+
+[33mcommit 89dfe092727020b890b65988ce7f33e50abaace6[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:13:30 2025 +0530
+
+    Add Recent quizzes page
+
+[33mcommit b104a94dcc08eac61060f61d7640b2cea2bd9ca8[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:12:45 2025 +0530
+
+    Add a performance analytics of user
+
+[33mcommit 954c5bd0b6b08845d4eb7001713540742678756a[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:11:42 2025 +0530
+
+    Add Attempts summary page
+
+[33mcommit f5b8d84955d76a56afa3bd93279f00c98360fd62[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:10:57 2025 +0530
+
+    Add Dashboard css
+
+[33mcommit 2657d2c714e84bcf04901973aa599f0998bf7271[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:10:26 2025 +0530
+
+    Add some variables in concept database
+
+[33mcommit 22d5b16f016e57062470e828d8afea685e93c2e0[m
+Author: Aditya Naik <adlearn536@gmail.com>
+Date:   Sat Dec 20 16:09:46 2025 +0530
+
+    Add AI Recommendation on User performance
+
+[33mcommit 914c8bf61b241e61ac6dbab91bc4b435f003be1f[m
+A
